@@ -11,9 +11,11 @@ import java.util.List;
 public class TodoListRecyclerAdapter extends RecyclerView.Adapter<TodoViewHolder>{
 
     private List<Todo> todoList;
+    private TodoViewHolder.Callback callback;
 
-    public TodoListRecyclerAdapter(List<Todo> todoList) {
+    public TodoListRecyclerAdapter(List<Todo> todoList, TodoViewHolder.Callback callback) {
         this.todoList = todoList;
+        this.callback = callback;
     }
 
     public void setTodoList(List<Todo> todoList) {
@@ -23,7 +25,7 @@ public class TodoListRecyclerAdapter extends RecyclerView.Adapter<TodoViewHolder
     @Override
     public TodoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_row, null);
-        TodoViewHolder viewHolder = new TodoViewHolder(view);
+        TodoViewHolder viewHolder = new TodoViewHolder(view, callback);
         return viewHolder;
     }
 

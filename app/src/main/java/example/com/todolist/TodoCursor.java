@@ -28,4 +28,9 @@ public class TodoCursor extends CursorWrapper {
         Integer index = getColumnIndex(TodoListColumns.NAME);
         return getString(index);
     }
+
+    public String getDescription() {
+        Integer index = getColumnIndex(TodoDetailColumns.DESCRIPTION);
+        return getString(index);
+    }
 }

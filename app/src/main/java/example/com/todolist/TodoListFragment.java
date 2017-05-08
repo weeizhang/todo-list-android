@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 import static example.com.todolist.R.layout.fragment_todo_list;
 
 
-public class TodoListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class TodoListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TodoViewHolder.Callback {
 
     public static final String TAG = "TodoListFragment";
 
@@ -65,7 +65,7 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
             List<Todo> todoList = new ArrayList<>();
             do {
                 TodoCursor todoCursor = new TodoCursor(data);
-                todoList.add(new Todo(todoCursor.getName(), todoCursor.getDate()));
+                todoList.add(new Todo(todoCursor.getId(), todoCursor.getName(), todoCursor.getDate()));
             } while (data.moveToNext());
             todoListRecyclerAdapter.setTodoList(todoList);
         }
@@ -76,9 +76,22 @@ public class TodoListFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
+    @Override
+    public void onTodoItemSelected(String todoId) {
+        TodoDetailFragment fragment = new TodoDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(TodoDetailFragment.ITEM_ID, todoId);
+        fragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, fragment, TodoDetailFragment.TAG)
+                .addToBackStack(TodoDetailFragment.TAG)
+                .commit();
+    }
+
     private void initRecycleView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        todoListRecyclerAdapter = new TodoListRecyclerAdapter(null);
+        todoListRecyclerAdapter = new TodoListRecyclerAdapter(null, this);
         todoListView.setLayoutManager(linearLayoutManager);
         todoListView.setAdapter(todoListRecyclerAdapter);
     }

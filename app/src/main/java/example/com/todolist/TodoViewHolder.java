@@ -15,13 +15,28 @@ public class TodoViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.todo_description)
     TextView todoDescription;
 
-    public TodoViewHolder(View itemView) {
+    private View itemView;
+    private Callback callback;
+
+    public TodoViewHolder(View itemView, Callback callback) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.itemView = itemView;
+        this.callback = callback;
     }
 
-    public void populate(Todo todo) {
+    public void populate(final Todo todo) {
         todoNameView.setText(todo.getName());
         todoDescription.setText(todo.getDate());
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback.onTodoItemSelected(todo.getId());
+            }
+        });
+    }
+
+    public interface Callback{
+        void onTodoItemSelected(String todoId);
     }
 }
